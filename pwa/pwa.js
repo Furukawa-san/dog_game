@@ -1,0 +1,8 @@
+/* PWA lifecycle; no analytics or third-party requests. */
+(function(){'use strict';
+const label=document.getElementById('offline-status');
+if(!('serviceWorker' in navigator)||!(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){label.textContent='オフラインPWAはHTTPSで開いて準備してね';return;}
+let reloading=false;function offerUpdate(reg){if(!reg.waiting||document.getElementById('pwa-update'))return;const b=document.createElement('button');b.id='pwa-update';b.className='secondary';b.style.cssText='font-size:11px;min-height:44px;padding:6px 12px';b.textContent='新しい版に更新';b.addEventListener('click',()=>{if(document.querySelector('dialog[open]')){label.textContent='設定やおせわを閉じてから、更新してね';return;}reg.waiting?.postMessage({type:'ACTIVATE_UPDATE'});});document.querySelector('footer').append(b);}
+navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;location.reload();});
+navigator.serviceWorker.register('./service-worker.js',{scope:'./',updateViaCache:'none'}).then(async reg=>{offerUpdate(reg);reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)offerUpdate(reg);});});const ready=await navigator.serviceWorker.ready;const channel=new MessageChannel();channel.port1.onmessage=e=>{label.textContent=e.data?.ready?'✓ オフラインの準備ができたよ':'オフライン準備中 · 通信をつないで開いてね';channel.port1.close();};ready.active?.postMessage({type:'CHECK_OFFLINE'},[channel.port2]);}).catch(()=>{label.textContent='オフライン準備に失敗 · 通信をつないで開き直してね';});
+})();

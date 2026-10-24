@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#f8f3ea"><meta name="color-scheme" content="light"><meta name="format-detection" content="telephone=no"><meta name="description" content="3Dのおうちで柴犬と暮らす、やさしい育成ゲーム。ミニゲーム11種。写真も育成記録も端末内に。"><title>しば日和 3D — 小さな家族と、毎日。</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23446b54'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='45' fill='%23fff0d6'%3E✿%3C/text%3E%3C/svg%3E"><!--__PWA__--><style>/*__STYLE__*/</style></head>
+<body>
+<canvas id="gl" aria-label="柴犬のいる3Dの世界"></canvas>
+<div id="fx" aria-hidden="true"></div>
+
+<!-- おうちのHUD -->
+<section id="home-hud" class="layer active" aria-label="おうち">
+ <header class="topbar">
+  <div class="profile card"><div class="lv" id="lv-badge">Lv.1</div><div class="pinfo"><div class="pname"><b id="dog-name">こむぎ</b><span id="stage-label">ころころ子犬</span></div><div class="xpbar"><i id="xp-bar"></i></div><small id="xp-label">つぎのレベルまで 20</small></div></div>
+  <div class="top-right"><span class="pill coin" id="coin-pill">🪙 0</span><span class="pill" id="day-label">1日目</span><button class="roundbtn" id="missions-open" aria-label="きょうのおねがい">📋<i class="badge" id="mission-badge" hidden></i></button><button class="roundbtn" id="stamps-open" aria-label="スタンプ帳">🏅</button><button class="roundbtn" id="zukan-open" aria-label="さかなずかん" hidden>🐟</button><button class="roundbtn" id="settings-open" aria-label="設定とバックアップ">⚙️</button></div>
+ </header>
+ <aside class="stats card" id="stats" aria-label="きょうのようす"></aside>
+ <div class="mood-tag" id="mood-label">ごきげん ♡</div>
+ <div id="speech" class="speech" hidden></div>
+ <div id="npc-speech" class="speech npc" hidden></div>
+ <div id="quest-chip" class="questchip" hidden><span id="quest-text"></span><button id="quest-go" aria-label="おつかいの ばしょへ いく">📍 いく</button></div>
+ <div id="quest-offer" class="minibar" hidden><div class="sheet-head"><b>🎒 おつかいのおねがい</b><span id="quest-offer-text"></span></div><div class="mini-row"><button class="primary" id="quest-accept">ひきうける</button><button class="secondary" id="quest-decline">またこんど</button></div></div>
+ <div id="fish-bar" class="minibar fishbar" hidden><div class="sheet-head"><b>🎣 さかなつり</b><span id="fish-text"></span></div><div class="mini-row"><button class="secondary" id="fish-stop">つりを やめる</button></div></div>
+ <div id="need" class="need" hidden></div>
+ <nav class="travel" id="travel" aria-label="おでかけ" hidden></nav>
+ <p class="tip" id="home-tip">床をタッチで移動 · 柴犬をなでなで · おもちゃをタップ · なぞると見まわせる · 2本指で拡大</p>
+ <button class="roundbtn viewreset" id="view-reset" aria-label="見る向きをもどす">🎥</button>
+ <nav class="dock" id="dock" aria-label="おせわ">
+  <button data-care="feed"><span>🍚</span>ごはん</button>
+  <button data-care="bath"><span>🫧</span>おふろ</button>
+  <button data-care="lesson"><span>🐾</span>しつけ</button>
+  <button data-care="rest"><span>🌙</span>ねんね</button>
+  <button data-care="toys"><span>🧸</span>おもちゃ</button>
+  <button data-care="play" class="accent"><span>🎾</span>あそぶ</button>
+  <button data-care="walk" class="accent"><span>🌿</span>おさんぽ</button>
+  <button data-care="shop"><span>🛍</span>ショップ</button>
+  <button data-care="closet"><span>👗</span>クローゼット</button>
+  <button data-care="photo"><span>📷</span>しゃしん</button>
+ </nav>
+ <div id="food-tray" class="sheet" hidden><div class="sheet-head"><b>ごはんの時間</b><span>タップでお皿へ · 柴犬にドラッグもできるよ</span><button class="x" data-close-sheet aria-label="閉じる">×</button></div><div class="foods"><button data-food="meal"><span>🍚</span>ごはん<small>おなか+27</small></button><button data-food="snack"><span>🍪</span>おやつ<small>ごきげん+9</small></button><button data-food="milk"><span>🥛</span>ミルク<small>おなか+18</small></button><button data-food="meat"><span>🍖</span>お肉<small>おなか+30</small></button><button data-food="fish"><span>🐟</span>お魚<small>おなか+24</small></button></div><p id="feeding-status" role="status">食べものを選んでね。</p></div>
+ <div id="toy-tray" class="sheet" hidden><div class="sheet-head"><b>おもちゃを選ぶ</b><span>選んだら、おもちゃをタップして遊ぼう</span><button class="x" data-close-sheet aria-label="閉じる">×</button></div><div class="foods toys" id="toy-list"></div><p class="small" id="toy-msg">ショップで新しいおもちゃを買えるよ。</p></div>
+ <div id="bath-panel" class="minibar" hidden><div class="sheet-head"><b>ふわふわ、おふろ</b><span id="bath-step">柴犬を指でごしごし</span><button class="x" id="bath-end" aria-label="おふろをやめる">×</button></div><div class="mini-row"><div class="progress"><i id="bath-bar"></i></div><button class="primary" id="bath-scrub">やさしく洗う</button></div></div>
+ <div id="lesson-panel" class="sheet" hidden><div class="sheet-head"><b>やさしく、しつけ</b><span id="lesson-msg">ことばを選んでね</span><button class="x" id="lesson-end" aria-label="しつけをおわる">×</button></div><div class="tricks" id="tricks"></div></div>
+ <div id="lesson-bar" class="minibar" hidden><div class="sheet-head"><b id="lesson-bar-title">しつけ</b><span id="lesson-bar-msg">柴犬をよく見てね</span><button class="x" id="lesson-bar-end" aria-label="しつけをおわる">×</button></div><div class="mini-row"><button class="primary" id="praise" disabled>できたら ほめる</button><button class="primary" id="wait-ok" hidden>よし！</button><button class="secondary" id="lesson-more">技をえらぶ</button></div></div>
+</section>
+
+<!-- あそび・おさんぽ選択 -->
+<section id="play-view" class="layer panel-view" aria-label="あそびをえらぶ" hidden>
+ <div class="panel"><div class="panel-head"><button class="back" data-home>← おうち</button><div class="tabs" role="tablist"><button role="tab" data-tab="play" class="on">🎾 あそび</button><button role="tab" data-tab="walk">🌿 おさんぽ</button></div><label class="diff">ペース <select id="difficulty"><option value="gentle">ゆったり</option><option value="normal">ふつう</option><option value="challenge">チャレンジ（コイン1.3倍）</option></select></label></div>
+ <div class="games" id="games"></div></div>
+</section>
+
+<!-- ミニゲーム -->
+<section id="game-hud" class="layer" aria-label="ミニゲーム" hidden>
+ <header class="gbar"><button class="back" id="game-back">← もどる</button><div class="gtitle"><b id="game-title">おさんぽ</b><span id="game-left">0</span></div><span class="gright" id="game-right"></span><button class="roundbtn" id="game-pause" aria-label="一時停止">⏸</button></header>
+ <div id="callout" class="callout" hidden></div>
+ <p id="game-status" class="gstatus" aria-live="polite"></p>
+ <div class="gcontrols" id="gcontrols"></div>
+ <div id="game-overlay" class="overlay"><div class="ocard"><span id="overlay-icon">🐾</span><h3 id="overlay-title">準備はいい？</h3><p id="overlay-copy"></p><button id="game-start" class="primary big">スタート</button><button id="game-quit" class="secondary" hidden>やめる</button></div></div>
+ <div id="result" class="overlay" hidden><div class="ocard result"><div class="stars" id="res-stars"><i>★</i><i>★</i><i>★</i></div><h3 id="res-title">おつかれさま！</h3><p class="res-score" id="res-score">0</p><p id="res-detail" class="small"></p><div class="res-badges" id="res-badges"></div><div class="row"><button id="res-again" class="secondary">もういちど</button><button id="res-more" class="secondary">ほかの遊び</button><button id="res-home" class="primary">おうちへ</button></div></div></div>
+</section>
+
+<!-- ショップ -->
+<section id="shop-view" class="layer side-view" aria-label="ショップ" hidden>
+ <div class="side"><div class="panel-head"><button class="back" data-home>← おうち</button><b>ショップ</b><span class="pill coin" id="shop-coins">🪙 0</span></div><div class="tabs shop-tabs"><button data-shop="wear" class="on">👗 きせかえ</button><button data-shop="room">🏠 おへや</button><button data-shop="yard">🌳 おにわ</button><button data-shop="toy">🧸 おもちゃ</button><button data-shop="gear">✨ ひみつ道具</button></div><div class="items" id="items"></div><p class="small" id="shop-msg">きせかえはクローゼットへ。ひみつ道具を買うと、新しい遊びやおさんぽコースが増えるよ。</p></div>
+</section>
+
+<!-- クローゼット -->
+<section id="closet-view" class="layer side-view" aria-label="クローゼット" hidden>
+ <div class="side"><div class="panel-head"><button class="back" data-home>← おうち</button><b>クローゼット</b></div><h3 class="sub">けいろ</h3><div class="coat-pick" id="coat-pick"></div><h3 class="sub">きせかえ</h3><div class="items" id="closet-items"></div><p class="small" id="closet-msg">タップで着る / ぬぐ。ショップで買ったものがここに入るよ。</p></div>
+</section>
+
+<!-- しゃしん -->
+<section id="photo-view" class="layer solid" aria-label="ツーショット" hidden>
+ <div class="photo-wrap"><div class="panel-head"><button class="back" data-home>← おうち</button><b>いっしょに、はいチーズ。</b></div>
+ <div class="photo-grid"><div class="photo-preview"><canvas id="photo-canvas" width="1000" height="750" aria-label="ツーショットのプレビュー"></canvas><video id="camera-video" autoplay playsinline muted hidden></video></div>
+ <div class="photo-controls"><button id="home-shot" class="primary">🏠 おうちの3Dを撮る</button><label class="button secondary file-label">写真を選ぶ<input id="photo-file" type="file" accept="image/*"></label><label class="button secondary file-label">カメラで撮影<input id="capture-file" type="file" accept="image/*" capture="user"></label><button id="live-camera" class="secondary">ライブカメラ</button><button id="capture-shot" class="primary" hidden>この瞬間を撮る</button><button id="camera-stop" class="secondary" hidden>カメラを閉じる</button>
+ <div class="poses"><span>ポーズ</span><button data-pose="idle" class="on">おすわり</button><button data-pose="paw">おて</button><button data-pose="happy">にっこり</button></div>
+ <label class="range-label">柴犬の大きさ<input id="dog-size" type="range" min="18" max="60" value="32"></label><p class="small">柴犬は指で動かせます。写真は端末の中だけで扱います。</p><button id="photo-save" class="primary" disabled>ツーショットを保存</button><a id="photo-open" class="button secondary" hidden target="_blank" rel="noopener">画像を開く・保存</a><p id="photo-message" class="small" aria-live="polite">写真を選ぶか、おうちを撮ってね。</p></div></div></div>
+</section>
+
+<footer class="foot"><span id="save-status">自動保存を確認中</span><span id="offline-status">端末内で育てる、小さな家族</span></footer>
+<div id="nogl" class="nogl" hidden><div><h2>3Dを表示できませんでした</h2><p>この端末・ブラウザではWebGLが使えないようです。SafariやChromeの最新版で開き直してください。育成記録はそのまま残っています。</p></div></div>
+
+<dialog id="settings-dialog"><div class="modal-head"><h2>この子と、わたし</h2><button data-close="settings-dialog" class="x" aria-label="閉じる">×</button></div><label class="field">おなまえ <input id="name-input" maxlength="32" autocomplete="off" placeholder="16文字まで"></label><fieldset class="coats"><legend>毛色</legend><label><input type="radio" name="coat" value="brown"><span class="coat-dot brown"></span>茶柴</label><label><input type="radio" name="coat" value="black"><span class="coat-dot black"></span>黒柴</label><label><input type="radio" name="coat" value="white"><span class="coat-dot white"></span>白柴</label></fieldset><button id="identity-save" class="primary wide">この名前・毛色にする</button><div class="row"><button id="sound-toggle" class="secondary">効果音：あり</button><button id="music-toggle" class="secondary">BGM：あり</button></div><h3>育成記録のバックアップ</h3><p class="small">自動保存だけに頼らず、ときどき記録を保存してね。端末を変えるときも使えます。</p><div class="row"><button id="export-save" class="secondary">記録を保存</button><label class="button secondary file-label">記録を読み込む<input id="import-file" type="file" accept=".json,.txt,application/json,text/plain"></label></div><details><summary>テキストで保存・読み込む</summary><textarea id="save-text" rows="5" aria-label="育成記録のJSONテキスト" spellcheck="false"></textarea><div class="row"><button id="text-export" class="secondary">記録を表示</button><button id="text-import" class="secondary">この記録を読み込む</button></div></details><p id="settings-message" class="feedback" aria-live="polite"></p><details><summary>成長・気分のおためし</summary><p class="small">通常の育成記録を変えずに、成長した姿や反応を見られます。</p><div class="row"><button data-demo="puppy" class="secondary">子犬</button><button data-demo="junior" class="secondary">若犬</button><button data-demo="adult" class="secondary">成犬</button></div><div class="row"><button data-demo="happy" class="secondary">ごきげん</button><button data-demo="sad" class="secondary">しょんぼり</button><button data-demo="grumpy" class="secondary">ぷんぷん</button></div></details><details><summary>ふたりの小さな日記</summary><ol id="journal-list"></ol></details><details><summary>このゲームについて</summary><p class="small">柴犬は承認済みのGrant画像をそのまま使い、3Dの部屋や道の中で動かしています。黒柴は全ポーズのアニメーション、茶柴・白柴は1枚絵に移動や弾む動きを付けています。子犬は2日で若犬、5日で成犬に。留守中の進行は1回48時間まで。死亡・課金・広告・外部通信はありません。</p></details><button id="reset-request" class="danger">はじめから育てる</button></dialog>
+<dialog id="missions-dialog"><div class="modal-head"><h2>きょうのおねがい</h2><button data-close="missions-dialog" class="x" aria-label="閉じる">×</button></div><p class="small" id="streak-label"></p><ul id="missions" class="missions"></ul><p class="small">3つ全部うけとると、ボーナス+30コイン。おねがいは毎日かわるよ。</p></dialog>
+<dialog id="stamps-dialog"><div class="modal-head"><h2>スタンプ帳</h2><button data-close="stamps-dialog" class="x" aria-label="閉じる">×</button></div><p class="small" id="stamp-count"></p><div id="stamps" class="stampgrid"></div><h3>あそびの記録</h3><div id="records" class="records"></div></dialog>
+<dialog id="catch-dialog" class="celebrate catch"><p class="catch-new" id="catch-new" hidden>はじめて つれた！ ずかんに のったよ</p><div id="catch-img" class="catch-img"></div><h2 id="catch-name"></h2><p id="catch-size" class="catch-size"></p><p id="catch-desc"></p><p id="catch-coins" class="catch-coins"></p><button id="catch-ok" class="primary wide">やったね！</button></dialog>
+<dialog id="zukan-dialog"><div class="modal-head"><h2>🐟 さかなずかん</h2><button data-close="zukan-dialog" class="x" aria-label="とじる">×</button></div><p class="small" id="zukan-count"></p><h3>🏞 かわの さかな</h3><div id="zukan-river" class="zukan"></div><h3>🏖 うみの いきもの</h3><div id="zukan-sea" class="zukan"></div><p id="zukan-detail" class="feedback" aria-live="polite"></p></dialog>
+<dialog id="confirm-dialog"><h2 id="confirm-title">記録を置きかえますか？</h2><p id="confirm-copy"></p><div class="row"><button id="confirm-no" class="secondary">やめる</button><button id="confirm-yes" class="primary">置きかえる</button></div></dialog>
+<dialog id="celebrate-dialog" class="celebrate"><div class="big-emoji" id="cel-icon">🎉</div><h2 id="cel-title">レベルアップ！</h2><p id="cel-copy"></p><button id="cel-ok" class="primary wide">やったね！</button></dialog>
+<dialog id="welcome-dialog" class="welcome"><div class="big-emoji">🐕</div><h2>しば日和へ、ようこそ</h2><p>今日から、小さな柴犬といっしょに暮らそう。なまえと毛色を決めてね。</p><label class="field">おなまえ <input id="welcome-name" maxlength="32" autocomplete="off" value="こむぎ"></label><p class="small">毛色をえらんでね（あとでクローゼットでも変えられるよ）</p><div class="coat-pick" id="welcome-coats"></div><p class="small">音が出ます（設定で切りかえられます）。</p><button id="welcome-go" class="primary wide">いっしょに暮らす</button></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<div id="food-ghost" class="food-ghost" hidden aria-hidden="true"></div>
+<script>/*__CODE__*/</script>
+</body></html>

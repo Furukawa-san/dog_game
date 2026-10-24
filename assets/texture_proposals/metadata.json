@@ -1,0 +1,145 @@
+{
+  "saved_at_utc": "2026-10-10T00:57:16.269392+00:00",
+  "pet_id": "pet_6ac2d603d01c8191ba9c203d3cdcbcae",
+  "scope": "asset proposals only; no image editing, game integration, or deployment",
+  "metadata_storage": "NTFS alternate data streams; portable identity also recorded here",
+  "files": [
+    {
+      "file_name": "grant-spritesheet.png",
+      "library_file_id": "libfile_62b5aeb7ebe88191bd5ec92b81ed03a7",
+      "file_id": "file_00000000e7ec820694b6e4f403870eb3",
+      "current_version_number": 0,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "path": "C:\\Users\\furuk\\Desktop\\dog_game\\assets\\texture_proposals\\grant-spritesheet.png",
+      "size_bytes": 2312833,
+      "width": 1536,
+      "height": 2288,
+      "bit_depth": 8,
+      "png_color_type": 6,
+      "has_alpha": true,
+      "sha256": "e04450980378590d9aa9490ec885001ce3a8c50ba6a75ca7ff0de0b11cdf596a",
+      "library_metadata_verified": true
+    },
+    {
+      "file_name": "grant-brown-preview.png",
+      "library_file_id": "libfile_7d42a9ee9c288191ba1409a38d193841",
+      "file_id": "file_000000009bd08209bdb11c359d2e2299",
+      "current_version_number": 0,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "path": "C:\\Users\\furuk\\Desktop\\dog_game\\assets\\texture_proposals\\grant-brown-preview.png",
+      "size_bytes": 1354770,
+      "width": 1229,
+      "height": 1280,
+      "bit_depth": 8,
+      "png_color_type": 6,
+      "has_alpha": true,
+      "sha256": "376ed17afd02b4711b5ae8cb1a86568fe6527645a6de753d154e29e6261cb9e0",
+      "library_metadata_verified": true
+    },
+    {
+      "file_name": "grant-white-preview.png",
+      "library_file_id": "libfile_0712336046ec8191a26b1df94ce8d831",
+      "file_id": "file_000000001b6082069c92fbb42ae1bbea",
+      "current_version_number": 0,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "path": "C:\\Users\\furuk\\Desktop\\dog_game\\assets\\texture_proposals\\grant-white-preview.png",
+      "size_bytes": 1309654,
+      "width": 1206,
+      "height": 1304,
+      "bit_depth": 8,
+      "png_color_type": 6,
+      "has_alpha": true,
+      "sha256": "433a0ecff1c8c03872dcf537e63607b629bcd0841e01fe83ef5981980c5bde25",
+      "library_metadata_verified": true
+    },
+    {
+      "file_name": "grant-brown-preview-v2.png",
+      "library_file_id": "libfile_0be4bc3221f48191a9ea4a804fad1726",
+      "file_id": "file_00000000b0a88209a020e16f661456a2",
+      "current_version_number": 0,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "path": "C:\\Users\\furuk\\Desktop\\dog_game\\assets\\texture_proposals\\grant-brown-preview-v2.png",
+      "size_bytes": 1286545,
+      "width": 1229,
+      "height": 1280,
+      "bit_depth": 8,
+      "png_color_type": 6,
+      "has_alpha": true,
+      "sha256": "be9c4abba89d19c0f33afee804a0c964c7aec2834347b026887fcec723d6668f",
+      "library_metadata_verified": true
+    },
+    {
+      "file_name": "grant-white-preview-v2.png",
+      "library_file_id": "libfile_5b257ea38cac81919123d017ee093c84",
+      "file_id": "file_0000000069708206bc8debd91347892f",
+      "current_version_number": 0,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "path": "C:\\Users\\furuk\\Desktop\\dog_game\\assets\\texture_proposals\\grant-white-preview-v2.png",
+      "size_bytes": 1274054,
+      "width": 1206,
+      "height": 1305,
+      "bit_depth": 8,
+      "png_color_type": 6,
+      "has_alpha": true,
+      "sha256": "258bc6688ead5c1610219bc82694437a8413116fa8ed283e85612f81f196d7be",
+      "library_metadata_verified": true
+    },
+    {
+      "file_name": "grant-brown-preview-v3.png",
+      "library_file_id": "libfile_bb07ec9f65d081919e4038feae5dd3d9",
+      "file_id": "file_00000000cf1c82099935b6f98703ee7e",
+      "current_version_number": 0,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "path": "C:\\Users\\furuk\\Desktop\\dog_game\\assets\\texture_proposals\\grant-brown-preview-v3.png",
+      "size_bytes": 1286491,
+      "width": 1229,
+      "height": 1280,
+      "bit_depth": 8,
+      "png_color_type": 6,
+      "has_alpha": true,
+      "sha256": "54479cc4f3fbdc0f7af0f312b8a1efbb0f18937223570e978c2871c7e30cc7c5",
+      "library_metadata_verified": true
+    }
+  ],
+  "unchanged_game_hashes": {
+    "index.html": "b235b5631e6732b7993c0870c47a4886c7d12fc49da20b4cdfa660e118866380",
+    "pwa/index.html": "d2c4d883751c8a72bcbfa9542116b4610fcd8292df80dbc234f05a5f19609e32",
+    "cloudflare-upload.zip": "b14f57fd01b81b7fb5a3d93af1dbe46a367a7b8be5540488092ac9173f0faf3b"
+  },
+  "visual_inspection": "All six source images viewed without image edits. Brown v3 is the intermediate chestnut color.",
+  "updated_at_utc": "2026-10-10T00:59:17.040278+00:00",
+  "latest_previews": {
+    "brown": "grant-brown-preview-v3.png",
+    "white": "grant-white-preview-v2.png"
+  }
+}

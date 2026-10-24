@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-10",
+  "release": "2026-10-10-touch3d-v3",
+  "use": "unchanged PNG bytes embedded in standalone and PWA HTML",
+  "selection": {
+    "black": "grant-spritesheet.png",
+    "brown": "grant-brown-preview-v3.png",
+    "white": "grant-white-preview-v2.png"
+  },
+  "selectedAssets": [
+    {
+      "file_name": "grant-spritesheet.png",
+      "sha256": "e04450980378590d9aa9490ec885001ce3a8c50ba6a75ca7ff0de0b11cdf596a",
+      "width": 1536,
+      "height": 2288
+    },
+    {
+      "file_name": "grant-white-preview-v2.png",
+      "sha256": "258bc6688ead5c1610219bc82694437a8413116fa8ed283e85612f81f196d7be",
+      "width": 1206,
+      "height": 1305
+    },
+    {
+      "file_name": "grant-brown-preview-v3.png",
+      "sha256": "54479cc4f3fbdc0f7af0f312b8a1efbb0f18937223570e978c2871c7e30cc7c5",
+      "width": 1229,
+      "height": 1280
+    }
+  ],
+  "blackAtlasFrames": 57,
+  "blackLookDirections": 16,
+  "brownWhitePoseAtlasAvailable": false,
+  "imagePixelsEdited": false,
+  "ageRepresentation": "uniform image scale 0.79 / 0.9 / 1.0",
+  "oldCoreSHA256": "1908945ad9eca53f8aa7a13d78300131c695d2fa6c29cb2058dd35b111f7f4e0",
+  "publicURL": "https://shiba-biyori-20261010.pages.dev/"
+}

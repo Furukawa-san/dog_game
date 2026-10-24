@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:#222}canvas{width:100%;height:100%;display:block}#ui{position:fixed;top:8px;left:8px;color:#fff;font:14px sans-serif}button{margin:2px}</style></head><body><canvas id="c"></canvas><div id="ui"></div>
+<script>const V=Date.now();for(const f of ["core","art","gfx","dogsprite"])document.write('<script src="../../src/'+f+'.js?v='+V+'"><\/script>');</script>
+<script>
+// 開発用: grant.js の画像キーを素材パスに置き換えて読み込む
+(async()=>{let g=await (await fetch('../../src/grant.js?v='+V)).text();const P='../../assets/texture_proposals/';g=g.replace('/*__GRANT_BLACK__*/',P+'grant-spritesheet.png').replace('/*__GRANT_BROWN__*/',P+'grant-brown-preview-v3.png').replace('/*__GRANT_WHITE__*/',P+'grant-white-preview-v2.png');(0,eval)(g);await GrantGraphics.ready;start();})();
+function start(){
+const r=new Gfx.Renderer(document.getElementById('c'));const cam=new Gfx.Camera();const P=new Gfx.Particles();
+const q=new URLSearchParams(location.search);
+const dogs=['brown','black','white'].map((c,i)=>{const d=new ShibaSprite({coat:c,stage:q.get('stage')||'adult',equip:{collar:q.get('collar'),head:q.get('head'),face:q.get('face'),neck:q.get('neck')}});d.x=(i-1)*1.3;return d;});
+for(const d of dogs){d.play(q.get('a')||'idle');}
+const ui=document.getElementById('ui');for(const a of ['idle','paw','happy','eat','sleep','bath','refuse','spin','bang','tilt','walk','run']){const b=document.createElement('button');b.textContent=a;b.onclick=()=>{for(const d of dogs){d.forceSpeed=a==='walk'?1.2:a==='run'?5:null;d.play(a==='walk'||a==='run'?'idle':a);}};ui.append(b);}
+const g=new Gfx.Geo();Gfx.Props.ground(g,20,20,'#cfe3b4','#b9d49a');Gfx.Props.tree(g,-2.5,-3);Gfx.Props.tree(g,2.8,-2.5,1.2);Gfx.Props.rock(g,1.5,1);const ground=new Gfx.Node(g.mesh());
+let last=performance.now(),yaw=+(q.get('yaw')||0);let lookT=0;
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;lookT+=dt;for(const d of dogs){d.setLook([Math.sin(lookT*.7)*3,.5,2]);d.update(dt);}P.update(dt);
+ r.resize();const D=+(q.get('d')||4.6);cam.pos=[Math.sin(yaw)*D,+(q.get('cy')||1.8),Math.cos(yaw)*D];cam.target=[0,.5,0];
+ r.begin(cam,{skyTop:'#9fd3f0',skyBottom:'#e8f4ec',fog:'#e8f4ec',fogNear:12,fogFar:40,sunDir:[-.4,1,.6],sun:[.5,.47,.4],sky:[.52,.55,.6],ground:[.36,.34,.3]});
+ r.draw(ground);for(const d of dogs){d.shadow(r);d.draw(r);}P.render(r);r.end();requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+window.addEventListener('pointermove',e=>{if(e.buttons)yaw+=e.movementX*.01;});
+}
+</script></body></html>
